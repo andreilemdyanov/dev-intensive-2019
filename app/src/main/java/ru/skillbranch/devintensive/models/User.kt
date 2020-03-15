@@ -3,7 +3,7 @@ package ru.skillbranch.devintensive.models
 import ru.skillbranch.devintensive.utils.Utils
 import java.util.*
 
-class User private constructor(
+class User constructor(
     var id: String,
     var firstName: String?,
     var lastName: String?,
@@ -46,7 +46,11 @@ class User private constructor(
             lastId++
 
             val (firstName, lastName) = Utils.parseFullName(fullName)
-            return Builder().id("$lastId").firstName(firstName).lastName(lastName).build()
+            return Builder()
+                .id("$lastId")
+                .firstName(firstName)
+                .lastName(lastName)
+                .build()
         }
     }
 }
