@@ -13,6 +13,9 @@ fun String.stripHtml(): String {
     val end = lastIndexOf("<")
     var result = substring(start, end)
     result = result.replace("\\s+".toRegex(), " ")
+    result = result.replace("&", "")
+    result = result.replace("\"", "")
+    result = result.replace("\'", "")
 
     return result
 }

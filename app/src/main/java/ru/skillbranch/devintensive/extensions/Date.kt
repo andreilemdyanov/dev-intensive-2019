@@ -48,7 +48,7 @@ fun Date.humanizeDiff(date: Date = Date()): String {
             else if ((day == -1L && hour < -2) || (-360 < day && day < -2))
                 "${TimeUnits.DAY.plural(day.toInt().unaryMinus())} назад"
             else if (hour < -22 || (day == -1L && hour > -2)) "день назад"
-            else if ((hour == -1L && min < -15) || (-22 < hour && hour < -2)) {
+            else if ((hour == -1L && min < -15) || (-22 < hour && hour < -1)) {
                 "${TimeUnits.HOUR.plural(hour.toInt().unaryMinus())} назад"
             } else if (min < -45 || (hour == -1L && min > -15)) "час назад"
             else if ((min == -1L && sec < -15) || (-45 < min && min < -2)) {
