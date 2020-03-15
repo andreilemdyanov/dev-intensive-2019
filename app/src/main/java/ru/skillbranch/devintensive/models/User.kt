@@ -13,31 +13,6 @@ class User private constructor(
     var lastVisit: Date?,
     var isOnline: Boolean
 ) {
-//    private var introBit: String
-//
-//    init {
-//        introBit = getIntro()
-//        println(
-//            "It's Alive!!!\n" +
-//                    "${if (lastName == "Doe") "His name is $firstName $lastName" else "And his name is $firstName $lastName!!!"}\n" +
-//                    "${getIntro()}"
-//        )
-//    }
-//
-//    private fun getIntro(): String = "$firstName $lastName"
-
-    fun printMe() = println(
-        """
-            id: $id
-            firstName: $firstName
-            lastName: $lastName
-            avatar: $avatar
-            rating: $rating
-            respect: $respect
-            lastVisit: $lastVisit
-            isOnline: $isOnline
-        """.trimIndent()
-    )
 
     data class Builder(
         var lastId: Int = -1,
