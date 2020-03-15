@@ -3,7 +3,16 @@ package ru.skillbranch.devintensive.models
 import ru.skillbranch.devintensive.utils.Utils
 import java.util.*
 
-data class User(private val config: Builder) {
+class User private constructor(
+    var id: String,
+    var firstName: String?,
+    var lastName: String?,
+    var avatar: String?,
+    var rating: Int,
+    var respect: Int,
+    var lastVisit: Date?,
+    var isOnline: Boolean
+) {
     private var introBit: String
 
     init {
@@ -30,20 +39,21 @@ data class User(private val config: Builder) {
         """.trimIndent()
     )
 
-    companion object Builder {
-        protected var lastId: Int = -1
-        var id: String = "$lastId++"
-        var firstName: String? = null
-        var lastName: String? = null
-        var avatar: String? = null
-        var rating: Int = 0
-        var respect: Int = 0
-        var lastVisit: Date? = Date()
+    data class Builder(
+        var lastId: Int = -1,
+        var id: String = "$lastId++",
+        var firstName: String? = null,
+        var lastName: String? = null,
+        var avatar: String? = null,
+        var rating: Int = 0,
+        var respect: Int = 0,
+        var lastVisit: Date? = Date(),
         var isOnline: Boolean = false
+    ) {
 
-        fun id(value: Int) = apply { id = "$value" }
-        fun firstName(value: String) = apply { firstName = value }
-        fun lastName(value: String) = apply { lastName = value }
+        fun id(value: String) = apply { id = "$value" }
+        fun firstName(value: String?) = apply { firstName = value }
+        fun lastName(value: String?) = apply { lastName = value }
         fun avatar(value: String) = apply { avatar = value }
         fun rating(value: Int) = apply { rating = value }
         fun respect(value: Int) = apply { respect = value }
@@ -51,7 +61,17 @@ data class User(private val config: Builder) {
         fun isOnline(value: Boolean) = apply { isOnline = value }
 
         fun build(): User {
-            return User(this)
+            return User(id, firstName, lastName, avatar, rating, respect, lastVisit, isOnline)
+        }
+    }
+
+    companion object Factory {
+        private var lastId: Int = -1
+        fun makeUser(fullName: String?): User {
+            lastId++
+
+            val (firstName, lastName) = Utils.parseFullName(fullName)
+            return Builder().id("$lastId").firstName(firstName).lastName(lastName).build()
         }
     }
 }
