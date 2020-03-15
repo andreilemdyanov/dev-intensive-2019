@@ -5,7 +5,7 @@ import java.util.*
 
 class ImageMessage (
     id: String,
-    from: User?,
+    from: User.Builder?,
     chat: Chat,
     isIncoming: Boolean = false,
     date: Date = Date(),
