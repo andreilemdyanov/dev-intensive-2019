@@ -16,6 +16,9 @@ fun String.stripHtml(): String {
     result = result.replace("&", "")
     result = result.replace("\"", "")
     result = result.replace("\'", "")
+    result = result.replace(">", "")
+    result = result.replace("<", "")
+    result = result.trim()
 
     return result
 }
