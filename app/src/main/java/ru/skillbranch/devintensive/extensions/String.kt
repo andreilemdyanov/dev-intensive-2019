@@ -7,3 +7,12 @@ fun String.truncate(num: Int = 16): String {
     }
     return result
 }
+
+fun String.stripHtml(): String {
+    val start = indexOf(">") + 1
+    val end = lastIndexOf("<")
+    var result = substring(start, end)
+    result = result.replace("\\s+".toRegex(), " ")
+
+    return result
+}
