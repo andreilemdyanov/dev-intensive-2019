@@ -28,6 +28,37 @@ fun Date.add(value: Int, units: TimeUnits = TimeUnits.SECOND): Date {
 }
 
 fun Date.humanizeDiff(date: Date = Date()): String {
+
+    val daysEndFirstPlus: MutableList<Int> = ArrayList()
+    val daysEndFirstMinus: MutableList<Int> = ArrayList()
+    val minutesEndFirstPlus: MutableList<Int> = ArrayList()
+    val minutesEndFirstMinus: MutableList<Int> = ArrayList()
+    val daysEndSecondPlus: MutableList<Int> = ArrayList()
+    val daysEndSecondMinus: MutableList<Int> = ArrayList()
+    val minutesEndSecondPlus: MutableList<Int> = ArrayList()
+    val minutesEndSecondMinus: MutableList<Int> = ArrayList()
+
+    for (i in 0..365) {
+        if (i % 10 in 2..4)
+            if (i !in 12..14 && i !in 112..114 && i !in 212..214 && i !in 312..314) {
+                daysEndFirstPlus.add(i)
+                daysEndFirstMinus.add(i.unaryMinus())
+                if (i < 50) {
+                    minutesEndFirstPlus.add(i)
+                    minutesEndFirstMinus.add(i.unaryMinus())
+                }
+            }
+        if (i % 10 == 1)
+            if (i != 11 && i != 111 && i != 211 && i != 311) {
+                daysEndSecondPlus.add(i)
+                daysEndSecondMinus.add(i.unaryMinus())
+                if (i < 50) {
+                    minutesEndSecondPlus.add(i)
+                    minutesEndSecondMinus.add(i.unaryMinus())
+                }
+            }
+    }
+
     var dif = this.time - date.time
     val positive = dif >= 0
     //Поправка
@@ -46,21 +77,8 @@ fun Date.humanizeDiff(date: Date = Date()): String {
             if (day < -360) "более года назад"
             else if ((day == -1L && hour < -2) || (-360 < day && day < -2))
                 when (day.toInt()) {
-                    in arrayOf(
-                        -2, -3, -4, -22, -23, -24, -32, -33, -34, -42, -43, -44, -52, -53, -54, -62,
-                        -63, -64, -72, -73, -74, -82, -83, -84, -92, -93, -94, -102, -103, -104, -112,
-                        -113, -114, -122, -123, -124, -132, -133, -134, -142, -143, -144, -152, -153,
-                        -154, -162, -163, -164, -172, -173, -174, -182, -183, -184, -192, -193, -194,
-                        -202, -203, -204, -212, -213, -214, -222, -223, -224, -232, -233, -234, -242,
-                        -243, -244, -252, -253, -254, -262, -263, -264, -272, -273, -274, -282, -283,
-                        -284, -292, -293, -294, -302, -303, -304, -312, -313, -314, -322, -323, -324,
-                        -332, -333, -334, -342, -343, -344, -352, -353, -354, -362, -363, -364
-                        ) -> "$day дня назад"
-                    in arrayOf(
-                        -1, -21, -31, -41, -51, -61, -71, -81, -91, -101, -121, -131, -141, -151,
-                        -161, -171, -181, -191, -201, -221, -231, -241, -251, -261, -271, -281, -291,
-                        -301, -321, -331, -341, -351, -361
-                    ) -> "$day день назад"
+                    in daysEndFirstMinus -> "$day дня назад"
+                    in daysEndSecondMinus -> "$day день назад"
                     else -> "$day дней назад"
                 }
             else if (hour < -22 || (day == -1L && hour > -2)) "день назад"
@@ -73,8 +91,8 @@ fun Date.humanizeDiff(date: Date = Date()): String {
             } else if (min < -45 || (hour == -1L && min > -15)) "час назад"
             else if ((min == -1L && sec < -15) || (-45 < min && min < -2)) {
                 when (min.toInt()) {
-                    in arrayOf(-2, -3, -4, -22, -23, -24, -32, -33, -34, -42, -43, -44) -> "$min минуты назад"
-                    in arrayOf(-1, -21, -31, -41) -> "$min минуту назад"
+                    in minutesEndFirstMinus -> "$min минуты назад"
+                    in minutesEndSecondMinus -> "$min минуту назад"
                     else -> "$min минут назад"
                 }
             } else if (sec < -45 || (min == -1L && sec > -15)) "минуту назад"
@@ -86,21 +104,8 @@ fun Date.humanizeDiff(date: Date = Date()): String {
             if (day > 360) "более чем через год"
             else if ((day == 1L && hour > 2) || day in 2..360)
                 when (day.toInt()) {
-                    in arrayOf(
-                        2, 3, 4, 22, 23, 24, 32, 33, 34, 42, 43, 44, 52, 53, 54, 62,
-                        63, 64, 72, 73, 74, 82, 83, 84, 92, 93, 94, 102, 103, 104, 112,
-                        113, 114, 122, 123, 124, 132, 133, 134, 142, 143, 144, 152, 153,
-                        154, 162, 163, 164, 172, 173, 174, 182, 183, 184, 192, 193, 194,
-                        202, 203, 204, 212, 213, 214, 222, 223, 224, 232, 233, 234, 242,
-                        243, 244, 252, 253, 254, 262, 263, 264, 272, 273, 274, 282, 283,
-                        284, 292, 293, 294, 302, 303, 304, 312, 313, 314, 322, 323, 324,
-                        332, 333, 334, 342, 343, 344, 352, 353, 354, 362, 363, 364
-                    ) -> "через $day дня"
-                    in arrayOf(
-                        1, 21, 31, 41, 51, 61, 71, 81, 91, 101, 121, 131, 141, 151,
-                        161, 171, 181, 191, 201, 221, 231, 241, 251, 261, 271, 281, 291,
-                        301, 321, 331, 341, 351, 361
-                    ) -> "через $day день"
+                    in daysEndFirstPlus -> "через $day дня"
+                    in daysEndSecondPlus -> "через $day день"
                     else -> "через $day дней"
                 }
             else if (hour > 22 || (day == 1L && hour < 2)) "через день"
@@ -113,8 +118,8 @@ fun Date.humanizeDiff(date: Date = Date()): String {
             } else if (min > 45 || (hour == 1L && min < 15)) "через час"
             else if ((min == 1L && sec > 15) || min in 2..45) {
                 when (min.toInt()) {
-                    in arrayOf(2, 3, 4, 22, 23, 24, 32, 33, 34, 42, 43, 44) -> "через $min минуты"
-                    in arrayOf(1, 21, 31, 41) -> "через $min минуту"
+                    in minutesEndFirstPlus -> "через $min минуты"
+                    in minutesEndSecondPlus -> "через $min минуту"
                     else -> "через $min минут"
                 }
             } else if (sec > 45 || (min == 1L && sec < 15)) "через минуту"
@@ -125,7 +130,6 @@ fun Date.humanizeDiff(date: Date = Date()): String {
     println(result)
     return result
 }
-
 
 enum class TimeUnits {
     SECOND,
