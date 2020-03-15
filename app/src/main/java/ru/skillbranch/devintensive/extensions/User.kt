@@ -5,7 +5,7 @@ import ru.skillbranch.devintensive.models.UserView
 import ru.skillbranch.devintensive.utils.Utils
 import java.util.*
 
-fun User.Builder.toUserView(): UserView{
+fun User.toUserView(): UserView{
 
     val nickName = Utils.transliteration("$firstName $lastName")
     val initials = Utils.toInitials(firstName, lastName)

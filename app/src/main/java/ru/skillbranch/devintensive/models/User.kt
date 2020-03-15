@@ -13,18 +13,18 @@ class User private constructor(
     var lastVisit: Date?,
     var isOnline: Boolean
 ) {
-    private var introBit: String
-
-    init {
-        introBit = getIntro()
-        println(
-            "It's Alive!!!\n" +
-                    "${if (lastName == "Doe") "His name is $firstName $lastName" else "And his name is $firstName $lastName!!!"}\n" +
-                    "${getIntro()}"
-        )
-    }
-
-    private fun getIntro(): String = "$firstName $lastName"
+//    private var introBit: String
+//
+//    init {
+//        introBit = getIntro()
+//        println(
+//            "It's Alive!!!\n" +
+//                    "${if (lastName == "Doe") "His name is $firstName $lastName" else "And his name is $firstName $lastName!!!"}\n" +
+//                    "${getIntro()}"
+//        )
+//    }
+//
+//    private fun getIntro(): String = "$firstName $lastName"
 
     fun printMe() = println(
         """
@@ -51,7 +51,7 @@ class User private constructor(
         var isOnline: Boolean = false
     ) {
 
-        fun id(value: String) = apply { id = "$value" }
+        fun id(value: String) = apply { id = value }
         fun firstName(value: String?) = apply { firstName = value }
         fun lastName(value: String?) = apply { lastName = value }
         fun avatar(value: String) = apply { avatar = value }
