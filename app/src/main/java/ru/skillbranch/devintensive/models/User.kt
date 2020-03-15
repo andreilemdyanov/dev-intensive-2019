@@ -3,7 +3,7 @@ package ru.skillbranch.devintensive.models
 import ru.skillbranch.devintensive.utils.Utils
 import java.util.*
 
-class User constructor(
+data class User constructor(
     var id: String,
     var firstName: String?,
     var lastName: String?,
@@ -53,4 +53,5 @@ class User constructor(
                 .build()
         }
     }
+
 }
