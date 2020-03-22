@@ -1,6 +1,7 @@
 package ru.skillbranch.devintensive.models
 
 import android.util.Log
+import androidx.core.text.isDigitsOnly
 
 class Bender(var status: Status = Status.NORMAL, var question: Question = Question.NAME) {
 
@@ -14,21 +15,54 @@ class Bender(var status: Status = Status.NORMAL, var question: Question = Questi
         Question.IDLE -> Question.IDLE.question
     }
 
+    private fun errorResponse(): String = when (question) {
+        Question.NAME -> "Имя должно начинаться с заглавной буквы"
+        Question.PROFESSION -> "Профессия должна начинаться со строчной буквы"
+        Question.MATERIAL -> "Материал не должен содержать цифр"
+        Question.BDAY -> "Год моего рождения должен содержать только цифры"
+        Question.SERIAL -> "Серийный номер содержит только цифры, и их 7"
+        Question.IDLE -> "На этом все, вопросов больше нет"
+    }
+
+    private fun validateAnswer(answer: String): Boolean =
+        when (question) {
+            Question.NAME -> {
+                question.answers.contains(answer.capitalize())
+            }
+            Question.PROFESSION -> {
+                question.answers.contains(answer.decapitalize())
+            }
+            Question.MATERIAL -> {
+                Regex("""\d+""").containsMatchIn(answer)
+            }
+            Question.BDAY -> {
+                !answer.isDigitsOnly()
+            }
+            Question.SERIAL -> {
+                !(answer.isDigitsOnly() && answer.length == 7)
+            }
+            Question.IDLE -> true
+
+        }
+
     fun listenAnswer(answer: String): Pair<String, Triple<Int, Int, Int>> {
         return if (question.answers.contains(answer)) {
             count = 0
             question = question.nextQuestion()
             "Отлично - ты справился\n${question.question}" to status.color
         } else {
-            count++
-            Log.d("M_Bender", "count = $count")
-            status = status.nextStatus()
-            if (count > 3) {
-                count = 0
-                question = Question.NAME
-                status = Status.NORMAL
-                return "Это неправильный ответ. Давай все по новой\n${question.question}" to status.color
-            } else "Это неправильный ответ\n${question.question}" to status.color
+            if (validateAnswer(answer)) errorResponse() to status.color
+            else {
+                count++
+                Log.d("M_Bender", "count = $count")
+                status = status.nextStatus()
+                if (count > 3) {
+                    count = 0
+                    question = Question.NAME
+                    status = Status.NORMAL
+                    return "Это неправильный ответ. Давай все по новой\n${question.question}" to status.color
+                } else "Это неправильный ответ\n${question.question}" to status.color
+            }
         }
 
     }
@@ -49,7 +83,7 @@ class Bender(var status: Status = Status.NORMAL, var question: Question = Questi
     }
 
     enum class Question(val question: String, val answers: List<String>) {
-        NAME("Как меня зовут?", listOf("бендер", "bender")) {
+        NAME("Как меня зовут?", listOf("Бендер", "Bender")) {
             override fun nextQuestion(): Question = PROFESSION
         },
         PROFESSION("Назови мою профессию?", listOf("сгибальщик", "bender")) {
