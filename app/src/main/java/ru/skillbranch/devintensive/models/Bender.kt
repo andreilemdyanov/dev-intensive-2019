@@ -3,7 +3,7 @@ package ru.skillbranch.devintensive.models
 import android.util.Log
 import androidx.core.text.isDigitsOnly
 
-class Bender(var status: Status = Status.NORMAL, var question: Question = Question.NAME) {
+data class Bender(var status: Status = Status.NORMAL, var question: Question = Question.NAME) {
 
     var count = 0
     fun askQuestion(): String = when (question) {
@@ -47,7 +47,7 @@ class Bender(var status: Status = Status.NORMAL, var question: Question = Questi
 
     fun listenAnswer(answer: String): Pair<String, Triple<Int, Int, Int>> {
         return if (question.answers.contains(answer)) {
-            count = 0
+//            count = 0
             question = question.nextQuestion()
             "Отлично - ты справился\n${question.question}" to status.color
         } else {
