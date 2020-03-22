@@ -21,7 +21,7 @@ class Bender(var status: Status = Status.NORMAL, var question: Question = Questi
         Question.MATERIAL -> "Материал не должен содержать цифр"
         Question.BDAY -> "Год моего рождения должен содержать только цифры"
         Question.SERIAL -> "Серийный номер содержит только цифры, и их 7"
-        Question.IDLE -> "На этом все, вопросов больше нет"
+        Question.IDLE -> ""
     }
 
     private fun validateAnswer(answer: String): Boolean =
@@ -51,7 +51,8 @@ class Bender(var status: Status = Status.NORMAL, var question: Question = Questi
             question = question.nextQuestion()
             "Отлично - ты справился\n${question.question}" to status.color
         } else {
-            if (validateAnswer(answer)) errorResponse() to status.color
+            if (question == Question.IDLE) question.question to status.color
+            else if (validateAnswer(answer)) "${errorResponse()}\n${question.question}" to status.color
             else {
                 count++
                 Log.d("M_Bender", "count = $count")
@@ -71,7 +72,7 @@ class Bender(var status: Status = Status.NORMAL, var question: Question = Questi
         NORMAL(Triple(255, 255, 255)),
         WARNING(Triple(255, 120, 0)),
         DANGER(Triple(255, 60, 60)),
-        CRITICAL(Triple(255, 255, 0));
+        CRITICAL(Triple(255, 0, 0));
 
         fun nextStatus(): Status {
             return if (this.ordinal < values().lastIndex) {
