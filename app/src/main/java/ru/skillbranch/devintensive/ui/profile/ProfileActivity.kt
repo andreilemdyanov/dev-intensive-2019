@@ -14,6 +14,7 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.android.synthetic.main.activity_profile.*
 import ru.skillbranch.devintensive.R
@@ -46,14 +47,14 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun initViewModel() {
-        viewModel = ViewModelProvider(this).get(ProfileViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         viewModel.getProfileData().observe(this, Observer { updateUI(it) })
         viewModel.getTheme().observe(this, Observer { updateTheme(it) })
     }
 
     private fun updateTheme(mode: Int) {
         Log.d("M_ProfileActivity", "updateTheme")
-        delegate.localNightMode = mode
+        delegate.setLocalNightMode(mode)
     }
 
     private fun updateUI(profile: Profile) {
@@ -122,7 +123,6 @@ class ProfileActivity : AppCompatActivity() {
         var path = et_repository.text.toString()
         var arr = path.split("/")
         var isValid = false
-//        if(arr[0] == "https:")
         if (arr.size == 4) {
             if (arr[0] == "https:" && arr[1] == "" && (arr[2] == "github.com" || arr[2] == "www.github.com") && arr[3].trim() != "")
                 isValid = true
