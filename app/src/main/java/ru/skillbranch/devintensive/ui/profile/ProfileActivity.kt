@@ -45,10 +45,10 @@ class ProfileActivity : AppCompatActivity() {
 
     }
 
-    private fun initViewModel(){
+    private fun initViewModel() {
         viewModel = ViewModelProvider(this).get(ProfileViewModel::class.java)
-        viewModel.getProfileData().observe(this, Observer {updateUI(it)})
-        viewModel.getTheme().observe(this, Observer {updateTheme(it)})
+        viewModel.getProfileData().observe(this, Observer { updateUI(it) })
+        viewModel.getTheme().observe(this, Observer { updateTheme(it) })
     }
 
     private fun updateTheme(mode: Int) {
@@ -57,8 +57,8 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun updateUI(profile: Profile) {
-        profile.toMap().also{
-            for((k,v) in viewFields) {
+        profile.toMap().also {
+            for ((k, v) in viewFields) {
                 v.text = it[k].toString()
             }
         }
@@ -81,16 +81,24 @@ class ProfileActivity : AppCompatActivity() {
         showCurrentMode(isEditMode)
 
         btn_edit.setOnClickListener {
-            if(isEditMode) saveProfileInfo()
-            isEditMode = !isEditMode
-            showCurrentMode(isEditMode)
-            validateRepoInput()
+
+                if (isEditMode)
+                    if(validateRepoInput())
+                        saveProfileInfo()
+                    else {
+                        et_repository.setText("")
+                        wr_repository.isErrorEnabled = false
+                }
+
+                isEditMode = !isEditMode
+                showCurrentMode(isEditMode)
+
         }
 
-        btn_switch_theme.setOnClickListener{
+        btn_switch_theme.setOnClickListener {
             viewModel.switchTheme()
         }
-        et_repository.addTextChangedListener(object: TextWatcher{
+        et_repository.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
 
             }
@@ -101,7 +109,7 @@ class ProfileActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (!validateRepoInput()) {
-                    wr_repository.error = "Error"
+                    wr_repository.error = "Невалидный адрес репозитория"
                 } else {
                     wr_repository.isErrorEnabled = false
                 }
@@ -110,16 +118,16 @@ class ProfileActivity : AppCompatActivity() {
         })
     }
 
-    private fun validateRepoInput(): Boolean{
+    private fun validateRepoInput(): Boolean {
         var path = et_repository.text.toString()
         var arr = path.split("/")
         var isValid = false
 //        if(arr[0] == "https:")
-        if(arr.size == 4){
-            if(arr[0] == "https:" && arr[1] == "" && (arr[2] == "github.com" || arr[2] == "www.github.com") && arr[3].trim() != "")
+        if (arr.size == 4) {
+            if (arr[0] == "https:" && arr[1] == "" && (arr[2] == "github.com" || arr[2] == "www.github.com") && arr[3].trim() != "")
                 isValid = true
         } else if (arr.size == 2) {
-            if((arr[0] == "github.com" || arr[0] == "www.github.com") && arr[1].trim() != "" )
+            if ((arr[0] == "github.com" || arr[0] == "www.github.com") && arr[1].trim() != "")
                 isValid = true
         } else {
             isValid = false
@@ -139,7 +147,8 @@ class ProfileActivity : AppCompatActivity() {
             "customer-stories",
             "security",
             "login",
-            "join")
+            "join"
+        )
         return isValid
     }
 
@@ -162,8 +171,8 @@ class ProfileActivity : AppCompatActivity() {
         ic_eye.visibility = if (isEdit) View.GONE else View.VISIBLE
         wr_about.isCounterEnabled = isEdit
 
-        with(btn_edit){
-            val filter: ColorFilter? = if(isEdit) {
+        with(btn_edit) {
+            val filter: ColorFilter? = if (isEdit) {
                 PorterDuffColorFilter(
                     resources.getColor(R.color.color_accent, theme),
                     PorterDuff.Mode.SRC_IN
@@ -171,7 +180,7 @@ class ProfileActivity : AppCompatActivity() {
             } else {
                 null
             }
-            val icon = if(isEdit) {
+            val icon = if (isEdit) {
                 resources.getDrawable(R.drawable.ic_save_black_24dp, theme)
             } else {
                 resources.getDrawable(R.drawable.ic_edit_black_24dp, theme)
@@ -181,7 +190,7 @@ class ProfileActivity : AppCompatActivity() {
         }
     }
 
-    private fun saveProfileInfo(){
+    private fun saveProfileInfo() {
         Profile(
             firstName = et_first_name.text.toString(),
             lastName = et_last_name.text.toString(),
