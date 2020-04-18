@@ -9,8 +9,8 @@ data class User constructor(
     var firstName: String?,
     var lastName: String?,
     var avatar: String?,
-    var rating: Int,
-    var respect: Int,
+    var rating: Int = 0,
+    var respect: Int = 0,
     val lastVisit: Date? = null,
     val isOnline: Boolean = false
 ) {

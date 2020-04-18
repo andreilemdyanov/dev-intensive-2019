@@ -5,7 +5,7 @@ import ru.skillbranch.devintensive.models.data.Chat
 import ru.skillbranch.devintensive.models.data.User
 import java.util.*
 
-class TextMessage(
+class TextMessage (
     id: String,
     from: User,
     chat: Chat,

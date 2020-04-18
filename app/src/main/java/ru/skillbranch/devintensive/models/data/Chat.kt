@@ -19,12 +19,12 @@ data class Chat(
         return messages.size
     }
 
-    private fun lastMessageDate(): Date? =
+    fun lastMessageDate(): Date? =
         if(messages.isEmpty()) null
         else  messages.last().date
 
 
-    private fun lastMessageShort(): Pair<String, String> {
+    fun lastMessageShort(): Pair<String, String> {
         if (messages.isEmpty()) return "Собщений еще нет" to "@John_Doe"
        return when (val lastMessage = messages.last()) {
             is TextMessage -> lastMessage.text.toString() to lastMessage.from.firstName.toString()
