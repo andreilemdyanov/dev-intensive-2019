@@ -2,10 +2,10 @@ package ru.skillbranch.devintensive.extensions
 
 import android.util.Log
 import ru.skillbranch.devintensive.models.data.User
-import ru.skillbranch.devintensive.models.UserView
+import ru.skillbranch.devintensive.utils.UserView
 import ru.skillbranch.devintensive.utils.Utils
 
-fun User.toUserView(): UserView{
+fun User.toUserView(): UserView {
     Log.d("M_User", "firstname = $firstName, lastName = $lastName")
     val nickName = Utils.transliteration("$firstName $lastName")
     val initials = Utils.toInitials(firstName, lastName)
