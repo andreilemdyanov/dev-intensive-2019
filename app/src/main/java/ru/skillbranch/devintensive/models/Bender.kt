@@ -46,24 +46,22 @@ data class Bender(var status: Status = Status.NORMAL, var question: Question = Q
         }
 
     fun listenAnswer(answer: String): Pair<String, Triple<Int, Int, Int>> {
-        return if (question.answers.contains(answer)) {
+        return if (question == Question.IDLE) question.question to status.color
+        else if (question.answers.contains(answer)) {
 //            count = 0
             question = question.nextQuestion()
             "Отлично - ты справился\n${question.question}" to status.color
-        } else {
-            if (question == Question.IDLE) question.question to status.color
-            else if (validateAnswer(answer)) "${errorResponse()}\n${question.question}" to status.color
-            else {
-                count++
-                Log.d("M_Bender", "count = $count")
-                status = status.nextStatus()
-                if (count > 3) {
-                    count = 0
-                    question = Question.NAME
-                    status = Status.NORMAL
-                    return "Это неправильный ответ. Давай все по новой\n${question.question}" to status.color
-                } else "Это неправильный ответ\n${question.question}" to status.color
-            }
+        } else if (validateAnswer(answer)) "${errorResponse()}\n${question.question}" to status.color
+        else {
+            count++
+            Log.d("M_Bender", "count = $count")
+            status = status.nextStatus()
+            if (count > 3) {
+                count = 0
+                question = Question.NAME
+                status = Status.NORMAL
+                return "Это неправильный ответ. Давай все по новой\n${question.question}" to status.color
+            } else "Это неправильный ответ\n${question.question}" to status.color
         }
 
     }
